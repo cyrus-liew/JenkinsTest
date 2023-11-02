@@ -27,15 +27,33 @@ pipeline {
 			}
 		}
 		stage('Frontend Tests') {
-            steps{
-                dir('frontend-sit-forum-app'){
-                    sh 'npm install'
-                    sh 'export DANGEROUSLY_DISABLE_HOST_CHECK=$DANGEROUSLY_DISABLE_HOST_CHECK'
-                    sh 'export REACT_APP_API=$REACT_APP_API'
-                    sh 'npm test'
-                    junit 'frontend-test-results.xml'
+		    stage('Install Frontend Dependencies'){
+		        steps{
+                    dir('frontend-sit-forum-app'){
+                        sh 'npm install'
+                        sh 'export DANGEROUSLY_DISABLE_HOST_CHECK=$DANGEROUSLY_DISABLE_HOST_CHECK'
+                        sh 'export REACT_APP_API=$REACT_APP_API'
+                    }
+		        }
+		    }
+		    parallel{
+		        stage('Deploy Frontend'){
+		            steps{
+                        dir('frontend-sit-forum-app'){
+                            sh 'npm start'
+                        }
+                    }
+		        }
+                stage('UI Test'){
+                    dependsOn 'npm start'
+                    steps{
+                        dir('frontend-sit-forum-app'){
+                            sh 'npm test'
+                            junit 'frontend-test-results.xml'
+                        }
+                    }
                 }
-            }
+		    }
         }
 		stage('OWASP Dependency-Check Vulnerabilities') {
 			steps {
