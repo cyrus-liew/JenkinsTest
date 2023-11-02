@@ -1,5 +1,10 @@
 pipeline {
-	agent any
+	agent {
+        docker {
+            image 'node:20.9.0-alpine3.18'
+            args '-p 8443:8443'
+        }
+    }
 	environment {
         PORT = credentials('port')
         DB_URI = credentials('DB_URI')
@@ -24,7 +29,7 @@ pipeline {
 		stage('Publish Backend Test Results'){
 		    steps{
 		        //Publish xml to Jenkins
-		        junit 'test-results.xml'
+		        junit '/backend-sit-forum-app-v1/test-results.xml'
 		    }
 		}
 		stage('OWASP Dependency-Check Vulnerabilities') {
