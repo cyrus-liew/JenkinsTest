@@ -28,8 +28,10 @@ pipeline {
 		}
 		stage('Publish Backend Test Results'){
 		    steps{
-		        //Publish xml to Jenkins
-		        junit '/backend-sit-forum-app-v1/test-results.xml'
+		        dir('backend-sit-forum-app-v1'){
+                    //Publish xml to Jenkins
+                    junit 'test-results.xml'
+		        }
 		    }
 		}
 		stage('OWASP Dependency-Check Vulnerabilities') {
