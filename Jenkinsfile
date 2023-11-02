@@ -7,16 +7,12 @@ pipeline {
         DB_URI = credentials('DB_URI')
         JWT_SECRET = credentials('JWT_SECRET')
         NODE_ENV = credentials('NODE_ENV')
+        DANGEROUSLY_DISABLE_HOST_CHECK=credentials('DANGEROUSLY_DISABLE_HOST_CHECK')
+        REACT_APP_API = credentials('REACT_APP_API')
     }
 
 	stages {
 		stage('Backend Tests') {
-		    //agent {
-            //    docker {
-            //        image 'node:20.9.0-alpine3.18'
-            //       args '-p 8443:8443'
-            //    }
-            //}
 		    steps{
                 dir('backend-sit-forum-app-v1'){
                     sh 'npm install'
@@ -26,10 +22,21 @@ pipeline {
                     sh 'export JWT_SECRET=$JWT_SECRET'
                     sh 'export NODE_ENV=$NODE_ENV'
                     sh 'npm test'
-                    junit 'test-results.xml'
+                    junit 'backend-test-results.xml'
                 }
 			}
 		}
+		stage('Frontend Tests') {
+            steps{
+                dir('frontend-sit-forum-app'){
+                    sh 'npm install'
+                    sh 'export DANGEROUSLY_DISABLE_HOST_CHECK=$DANGEROUSLY_DISABLE_HOST_CHECK'
+                    sh 'export REACT_APP_API=$REACT_APP_API'
+                    sh 'npm test'
+                    junit 'frontend-test-results.xml'
+                }
+            }
+        }
 		stage('OWASP Dependency-Check Vulnerabilities') {
 			steps {
 			    dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'

@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node -r esm server.js",
     "dev": "nodemon -r esm server.js",
-    "test": "npx mocha --reporter mocha-junit-reporter test --reporter-options mochaFile=test-results.xml"
+    "test": "npx mocha --reporter mocha-junit-reporter test --reporter-options mochaFile=backend-test-results.xml"
   },
   "keywords": [],
   "author": "",
