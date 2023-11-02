@@ -31,7 +31,7 @@ pipeline {
                 sh 'apt-get install -y google-chrome-stable'
 
                 // Download and install ChromeDriver (adjust version as needed)
-                sh 'wget -N https://chromedriver.storage.googleapis.com/94.0.4606.61/chromedriver_linux64.zip'
+                sh 'wget -N https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/119.0.6045.105/linux64/chromedriver-linux64.zip'
                 sh 'unzip chromedriver_linux64.zip -d /usr/bin/'
                 sh 'chmod +x /usr/bin/chromedriver'
             }
