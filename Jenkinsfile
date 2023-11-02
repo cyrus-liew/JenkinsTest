@@ -42,8 +42,9 @@ pipeline {
                     }
                     steps {
                         sh 'mvn -B -DskipTests clean package'
+                        sh 'sleep 120'
                     	sh 'mvn test'
-                    	junit 'target/surefire-reports/*.xml'
+                    	junit './frontend-sit-forum-app/frontend-test-results.xml'
                         //sh 'sleep 120'
                         //sh 'cd ./frontend-sit-forum-app && npm test'
                         //junit './frontend-sit-forum-app/frontend-test-results.xml'
