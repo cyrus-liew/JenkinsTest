@@ -18,8 +18,8 @@ pipeline {
     }
 
 	stages {
-		stage('Backend Tests') {
-		    steps{
+		//stage('Backend Tests') {
+		    //steps{
                 //dir('backend-sit-forum-app-v1'){
                     //sh 'npm install'
                     //sh 'npm audit fix --force'
@@ -30,8 +30,8 @@ pipeline {
                     //sh 'npm test'
                     //junit 'backend-test-results.xml'
                 //}
-			}
-		}
+			//}
+		//}
 
         stage('Testing'){
             parallel{
