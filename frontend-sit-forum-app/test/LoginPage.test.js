@@ -111,8 +111,8 @@ describe('Login Page Validation Test', function () {
 
     console.log("4");
 
-    after(async function () {
-        await driver.quit();
-        console.log("after");
-    });
+    // after(async function () {
+    //     await driver.quit();
+    //     console.log("after");
+    // });
 });
