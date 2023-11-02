@@ -35,7 +35,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "npx mocha test",
+    "test": "npx mocha --reporter mocha-junit-reporter test --reporter-options mochaFile=frontend-test-results.xml",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
