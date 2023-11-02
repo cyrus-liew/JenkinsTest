@@ -2,22 +2,32 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
 const { assert } = require('chai');
 const { Options: ChromeOptions } = require('selenium-webdriver/chrome');
 const { expect } = require('chai');
+const chrome = require("selenium-webdriver/chrome");
 console.log("imports");
 describe('Login Page Validation Test', function () {
 
     let driver;
     let chrome = require('selenium-webdriver/chrome');
+    let service;
 
     console.log("let");
 
     before(async function () {
         console.log("before start");
-        //const chromeOptions = new ChromeOptions();
-        console.log("before 1");
-        //chromeOptions.addArguments('disable-dev-shm-usage');
-        console.log("before 2");
+        service = new chrome.ServiceBuilder()
+            .loggingTo('/my/log/file.txt')
+            .enableVerboseLogging()
+            .build();
+
+        console.log("before options");
+        let options = new chrome.Options();
+
+        console.log("before arguments");
+        options.addArguments("no-sandbox", "headless", "disable-gpu", "window-size=1024,768", "disable-dev-shm-usage")
+
+        console.log("before try");
         try{
-            driver = await new Builder().forBrowser('chrome').setChromeOptions(new chrome.Options().headless()).build();
+            driver = await chrome.Driver.createSession(options, service);
         }
         catch (error){
             console.error('Error:', error);
