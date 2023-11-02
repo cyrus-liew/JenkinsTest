@@ -6,7 +6,7 @@ pipeline {
         }
     }
 
-	tools {nodejs 'NodeJS'}
+	//tools {nodejs 'NodeJS'}
 
 	environment {
         PORT = credentials('port')
@@ -32,20 +32,15 @@ pipeline {
                 }
 			}
 		}
-		stage('Install Frontend Dependencies'){
-            steps{
-                dir('frontend-sit-forum-app'){
-                    sh 'npm install'
-                    sh 'export DANGEROUSLY_DISABLE_HOST_CHECK=$DANGEROUSLY_DISABLE_HOST_CHECK'
-                    sh 'export REACT_APP_API=$REACT_APP_API'
-                }
-            }
-        }
+
         stage('Testing'){
             parallel{
                 stage('Start Frontend'){
                     steps{
                         dir('frontend-sit-forum-app'){
+                            sh 'npm install'
+                            sh 'export DANGEROUSLY_DISABLE_HOST_CHECK=$DANGEROUSLY_DISABLE_HOST_CHECK'
+                            sh 'export REACT_APP_API=$REACT_APP_API'
                             sh 'npm start'
                         }
                     }
@@ -53,7 +48,7 @@ pipeline {
                 stage('Frontend Tests') {
                     steps {
                         dir('frontend-sit-forum-app'){
-                            sh 'sleep 60'
+                            sh 'sleep 180'
                             sh 'npm test'
                             junit 'frontend-test-results.xml'
                         }
