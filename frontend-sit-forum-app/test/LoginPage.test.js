@@ -11,8 +11,9 @@ describe('Login Page Validation Test', function () {
     before(async function () {
         console.log("before start");
         const chromeOptions = new ChromeOptions();
+        console.log("before 1");
         chromeOptions.addArguments('--headless'); // Add the --headless option to run Chrome headlessly
-
+        console.log("before 2");
         driver = await new Builder()
             .forBrowser('chrome')
             .setChromeOptions(chromeOptions)
