@@ -6,17 +6,18 @@ console.log("imports");
 describe('Login Page Validation Test', function () {
 
     let driver;
+    let chrome = require('selenium-webdriver/chrome');
+
     console.log("let");
 
     before(async function () {
         console.log("before start");
-        const chromeOptions = new ChromeOptions();
+        //const chromeOptions = new ChromeOptions();
         console.log("before 1");
-        chromeOptions.addArguments('--headless'); // Add the --headless option to run Chrome headlessly
-        chromeOptions.addArguments('--disable-dev-shm-usage');
+        //chromeOptions.addArguments('disable-dev-shm-usage');
         console.log("before 2");
         try{
-            driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
+            driver = await new Builder().forBrowser('chrome').setChromeOptions(new chrome.Options().headless()).build();
         }
         catch (error){
             console.error('Error:', error);
