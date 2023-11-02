@@ -26,16 +26,16 @@ pipeline {
                 }
 			}
 		}
+        stage('Install Frontend Dependencies'){
+            steps{
+                dir('frontend-sit-forum-app'){
+                    sh 'npm install'
+                    sh 'export DANGEROUSLY_DISABLE_HOST_CHECK=$DANGEROUSLY_DISABLE_HOST_CHECK'
+                    sh 'export REACT_APP_API=$REACT_APP_API'
+                }
+            }
+        }
 		stage('Frontend Tests') {
-		    stage('Install Frontend Dependencies'){
-		        steps{
-                    dir('frontend-sit-forum-app'){
-                        sh 'npm install'
-                        sh 'export DANGEROUSLY_DISABLE_HOST_CHECK=$DANGEROUSLY_DISABLE_HOST_CHECK'
-                        sh 'export REACT_APP_API=$REACT_APP_API'
-                    }
-		        }
-		    }
 		    parallel{
 		        stage('Deploy Frontend'){
 		            steps{
