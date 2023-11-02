@@ -13,6 +13,7 @@ describe('Login Page Validation Test', function () {
         const chromeOptions = new ChromeOptions();
         console.log("before 1");
         chromeOptions.addArguments('--headless'); // Add the --headless option to run Chrome headlessly
+        chromeOptions.addArguments('--disable-dev-shm-usage');
         console.log("before 2");
         try{
             driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
@@ -39,7 +40,7 @@ describe('Login Page Validation Test', function () {
     console.log("1");
 
     it('should display password validation message for an invalid password.', async function () {
-        await driver.get('http://localhost:3000/login'); // Replace with your actual URL
+        await driver.get('http://13.215.46.204:8443/login'); // Replace with your actual URL
 
         const passwordInput = await driver.findElement(By.id('password'));
         await passwordInput.sendKeys('short');
@@ -52,7 +53,7 @@ describe('Login Page Validation Test', function () {
     console.log("2");
 
     it('should display email validation message for an invalid email with a valid password.', async function () {
-        await driver.get('http://localhost:3000/login'); // Replace with your actual URL
+        await driver.get('http://13.215.46.204:8443/login'); // Replace with your actual URL
 
         const emailInput = await driver.findElement(By.id('email'));
         await emailInput.sendKeys('invalid-email');
@@ -68,7 +69,7 @@ describe('Login Page Validation Test', function () {
     console.log("3");
 
     it('should display password validation message for an invalid password with a valid email.', async function () {
-        await driver.get('http://localhost:3000/login'); // Replace with your actual URL
+        await driver.get('http://13.215.46.204:8443/login'); // Replace with your actual URL
 
         const emailInput = await driver.findElement(By.id('email'));
         await emailInput.sendKeys('testadmin@test.com');
@@ -85,7 +86,7 @@ describe('Login Page Validation Test', function () {
 
     it('should display no error message for a valid password with a valid email.', async function () {
         const output = true;
-        await driver.get('http://localhost:3000/login'); // Replace with your actual URL
+        await driver.get('http://13.215.46.204:8443/login'); // Replace with your actual URL
 
         const emailInput = await driver.findElement(By.id('email'));
         await emailInput.sendKeys('testadmin@test.com');
