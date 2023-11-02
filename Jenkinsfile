@@ -26,29 +26,32 @@ pipeline {
                 }
 			}
 		}
-        stage('Install Frontend Dependencies'){
-            agent {
-                    docker {
-                        image 'node:20.9.0-alpine3.18'
-                        args '-p 8443:3000'
-                    }
-                }
+		stage('Install Frontend Dependencies'){
             steps{
                 dir('frontend-sit-forum-app'){
                     sh 'npm install'
-                    sh '(npm start &) && sleep 60 && npm test'
-                    junit 'frontend-test-results.xml'
                 }
             }
         }
-		stage('Frontend Tests') {
-            steps {
-                dir('frontend-sit-forum-app'){
-                    sh 'npm test'
-                    junit 'frontend-test-results.xml'
+		parallel{
+		    stage('Start Frontend'){
+                steps{
+                    dir('frontend-sit-forum-app'){
+                        sh 'npm start &'
+                    }
                 }
             }
-        }
+            stage('Frontend Tests') {
+                steps {
+                    dir('frontend-sit-forum-app'){
+                        sh 'sleep 60'
+                        sh 'npm test'
+                        junit 'frontend-test-results.xml'
+                    }
+                }
+            }
+		}
+
 		stage('OWASP Dependency-Check Vulnerabilities') {
 			steps {
 			    dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
