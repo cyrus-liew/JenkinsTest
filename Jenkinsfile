@@ -36,8 +36,8 @@ pipeline {
                 sh 'cp ./chromedriver-linux64/chromedriver /usr/bin/chromedriver'
                 sh 'chmod +x /usr/bin/chromedriver'
 
-                sh 'apt-get install xvfb'
-                sh 'apt-get install dbus'
+                sh 'apt-get install xvfb -y'
+                sh 'apt-get install dbus -y'
                 sh 'service dbus start'
             }
         }
