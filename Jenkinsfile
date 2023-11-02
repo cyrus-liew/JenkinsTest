@@ -26,19 +26,26 @@ pipeline {
                 }
 			}
 		}
-		stage('Install Frontend Dependencies'){
-            steps{
-                dir('frontend-sit-forum-app'){
-                    sh 'npm install'
+
+        stage('Testing'){
+            agent {
+                docker {
+                    image 'node:20.9.0-alpine3.18'
+                    args '-p 8443:3000'
                 }
             }
-        }
-        stage('Testing'){
+            stage('Install Frontend Dependencies'){
+                steps{
+                    dir('frontend-sit-forum-app'){
+                        sh 'npm install'
+                    }
+                }
+            }
             parallel{
                 stage('Start Frontend'){
                     steps{
                         dir('frontend-sit-forum-app'){
-                            sh 'npm start &'
+                            sh 'npm start"
                         }
                     }
                 }
