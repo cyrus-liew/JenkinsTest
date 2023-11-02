@@ -30,10 +30,7 @@ pipeline {
             steps{
                 dir('frontend-sit-forum-app'){
                     sh 'npm install'
-                    sh 'export DANGEROUSLY_DISABLE_HOST_CHECK=$DANGEROUSLY_DISABLE_HOST_CHECK'
-                    sh 'export REACT_APP_API=$REACT_APP_API'
-                    sh '(npm start &) && sleep 60'
-                    sh 'npm test'
+                    sh '(npm start &) && sleep 60 && npm test'
                     junit 'frontend-test-results.xml'
                 }
             }
