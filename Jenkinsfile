@@ -31,14 +31,14 @@ pipeline {
                 }
 			}
 		}
-        stage('Testing'){
-            stage('Install Frontend Dependencies'){
-                steps{
-                    dir('frontend-sit-forum-app'){
-                        sh 'npm install'
-                    }
+		stage('Install Frontend Dependencies'){
+            steps{
+                dir('frontend-sit-forum-app'){
+                    sh 'npm install'
                 }
             }
+        }
+        stage('Testing'){
             parallel{
                 stage('Start Frontend'){
                     steps{
