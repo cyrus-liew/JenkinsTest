@@ -1,19 +1,20 @@
 const { Builder, By, Key, until } = require('selenium-webdriver');
-const htmlEntities = require('html-entities');
 const { assert } = require('chai');
-const { Options } = require('selenium-webdriver/chrome'); // Import the Chrome Options
+const { Options: ChromeOptions } = require('selenium-webdriver/chrome');
 const { expect } = require('chai');
-
-// Create ChromeOptions
-const chromeOptions = new Options();
-chromeOptions.headless();
 
 describe('Login Page Validation Test', function () {
 
     let driver;
 
     before(async function () {
-        driver = await new Builder().forBrowser('chrome').build();
+        const chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments('--headless'); // Add the --headless option to run Chrome headlessly
+
+        driver = await new Builder()
+            .forBrowser('chrome')
+            .setChromeOptions(chromeOptions)
+            .build();
     });
 
     it('should display email validation message for an invalid email.', async function () {
