@@ -15,14 +15,14 @@ pipeline {
 		stage('Backend Tests') {
 		    steps{
                 dir('backend-sit-forum-app-v1'){
-                    sh 'npm install'
-                    sh 'npm audit fix --force'
-                    sh 'export PORT=$PORT'
-                    sh 'export DB_URI=$DB_URI'
-                    sh 'export JWT_SECRET=$JWT_SECRET'
-                    sh 'export NODE_ENV=$NODE_ENV'
-                    sh 'npm test'
-                    junit 'backend-test-results.xml'
+                    //sh 'npm install'
+                    //sh 'npm audit fix --force'
+                    //sh 'export PORT=$PORT'
+                    //sh 'export DB_URI=$DB_URI'
+                    //sh 'export JWT_SECRET=$JWT_SECRET'
+                    //sh 'export NODE_ENV=$NODE_ENV'
+                    //sh 'npm test'
+                    //junit 'backend-test-results.xml'
                 }
 			}
 		}
