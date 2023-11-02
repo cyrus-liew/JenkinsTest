@@ -1,7 +1,7 @@
 pipeline {
 	agent any
 
-	tools {nodejs 'node'}
+	tools {nodejs 'NodeJS'}
 	environment {
         PORT = credentials('port')
         DB_URI = credentials('DB_URI')
