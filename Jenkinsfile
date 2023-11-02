@@ -26,13 +26,14 @@ pipeline {
                 }
 			}
 		}
-
-        agent {
-            docker {
-                image 'node:20.9.0-alpine3.18'
-                args '-p 8443:3000'
-            }
+    }
+    agent {
+        docker {
+            image 'node:20.9.0-alpine3.18'
+            args '-p 8443:3000'
         }
+    }
+    stages{
         stage('Testing'){
             stage('Install Frontend Dependencies'){
                 steps{
@@ -60,13 +61,14 @@ pipeline {
                 }
             }
         }
-
-        agent any
-		stage('OWASP Dependency-Check Vulnerabilities') {
-			steps {
-			    dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
-			}
-		}
+    }
+    agent any
+    stages{
+        stage('OWASP Dependency-Check Vulnerabilities') {
+            steps {
+                dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+            }
+        }
 	}
 	post {
 		success {
