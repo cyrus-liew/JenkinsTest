@@ -32,7 +32,7 @@ pipeline {
 
                 // Download and install ChromeDriver (adjust version as needed)
                 sh 'wget -N https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/119.0.6045.105/linux64/chromedriver-linux64.zip'
-                sh 'unzip chromedriver_linux64.zip -d /usr/bin/'
+                sh 'unzip chromedriver-linux64.zip -d /usr/bin/'
                 sh 'chmod +x /usr/bin/chromedriver'
             }
         }
