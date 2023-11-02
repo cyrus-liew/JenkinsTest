@@ -1,7 +1,7 @@
 pipeline {
 	agent {
         docker {
-            image 'node:20.9.0-alpine3.18'
+            image 'node:18.18.2-alpine'
             args '-p 3000:3000'
         }
     }
@@ -37,21 +37,17 @@ pipeline {
             parallel{
                 stage('Start Frontend'){
                     steps{
-                        dir('frontend-sit-forum-app'){
-                            sh 'npm install'
-                            sh 'export DANGEROUSLY_DISABLE_HOST_CHECK=$DANGEROUSLY_DISABLE_HOST_CHECK'
-                            sh 'export REACT_APP_API=$REACT_APP_API'
-                            sh 'npm start'
-                        }
+                        sh 'cd ./frontend-sit-forum-app && npm install'
+                        sh 'cd ./frontend-sit-forum-app && export DANGEROUSLY_DISABLE_HOST_CHECK=$DANGEROUSLY_DISABLE_HOST_CHECK'
+                        sh 'cd ./frontend-sit-forum-app && export REACT_APP_API=$REACT_APP_API'
+                        sh 'cd ./frontend-sit-forum-app && npm start'
                     }
                 }
                 stage('Frontend Tests') {
                     steps {
-                        dir('frontend-sit-forum-app'){
-                            sh 'sleep 180'
-                            sh 'npm test'
-                            junit 'frontend-test-results.xml'
-                        }
+                        sh 'sleep 120'
+                        sh 'cd ./frontend-sit-forum-app && npm test'
+                        junit './frontend-sit-forum-app/frontend-test-results.xml'
                     }
                 }
             }
