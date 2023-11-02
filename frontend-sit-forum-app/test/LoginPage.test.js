@@ -123,8 +123,13 @@ describe('Login Page Validation Test', function () {
 
     console.log("5");
 
-    // after(async function () {
-    //     await driver.quit();
-    //     console.log("after");
-    // });
+    after(async function () {
+        console.log("after1");
+        if (driver){
+            console.log("after2");
+            await driver.quit();
+            console.log("after3");
+        }
+        console.log("after4");
+    });
 });
