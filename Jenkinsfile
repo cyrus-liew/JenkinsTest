@@ -54,6 +54,8 @@ pipeline {
                         dir('frontend-sit-forum-app'){
                             sh 'sleep 120'
                             sh 'npm test'
+                            sh 'pwd'
+                            sh 'ls'
                             junit 'frontend-test-results.xml'
                         }
                     }
