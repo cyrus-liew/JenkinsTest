@@ -32,31 +32,15 @@ pipeline {
                     sh 'npm install'
                     sh 'export DANGEROUSLY_DISABLE_HOST_CHECK=$DANGEROUSLY_DISABLE_HOST_CHECK'
                     sh 'export REACT_APP_API=$REACT_APP_API'
+                    sh 'npm start'
                 }
             }
         }
 		stage('Frontend Tests') {
             steps {
-                script {
-                    // Define and execute 'npm start' stage
-                    def npmStart = {
-                        dir('frontend-sit-forum-app') {
-                            sh 'npm start'
-                        }
-                    }
-
-                    // Define and execute 'npm test' stage, which depends on 'npm start'
-                    def npmTest = {
-                        dir('frontend-sit-forum-app') {
-                            sh 'npm test'
-                            junit 'frontend-test-results.xml'
-                        }
-                    }
-
-                    parallel(
-                        npmStart: npmStart,
-                        npmTest: npmTest
-                    )
+                dir('frontend-sit-forum-app'){
+                    sh 'npm test'
+                    junit 'frontend-test-results.xml'
                 }
             }
         }
