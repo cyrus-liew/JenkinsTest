@@ -9,6 +9,7 @@ describe('Login Page Validation Test', function () {
     console.log("let");
 
     before(async function () {
+        console.log("before start");
         const chromeOptions = new ChromeOptions();
         chromeOptions.addArguments('--headless'); // Add the --headless option to run Chrome headlessly
 
@@ -17,7 +18,7 @@ describe('Login Page Validation Test', function () {
             .setChromeOptions(chromeOptions)
             .build();
 
-        console.log("before");
+        console.log("before end");
     });
 
     it('should display email validation message for an invalid email.', async function () {
