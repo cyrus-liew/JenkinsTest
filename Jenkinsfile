@@ -1,8 +1,8 @@
 pipeline {
 	agent {
         docker {
-            image 'node:18.18.2-alpine'
-            args '-p 3000:3000'
+            image 'node:18.18.2'
+            args '-p 8443:3000'
         }
     }
 
@@ -20,7 +20,7 @@ pipeline {
 	stages {
 		stage('Backend Tests') {
 		    steps{
-                dir('backend-sit-forum-app-v1'){
+                //dir('backend-sit-forum-app-v1'){
                     //sh 'npm install'
                     //sh 'npm audit fix --force'
                     //sh 'export PORT=$PORT'
@@ -29,7 +29,7 @@ pipeline {
                     //sh 'export NODE_ENV=$NODE_ENV'
                     //sh 'npm test'
                     //junit 'backend-test-results.xml'
-                }
+                //}
 			}
 		}
 

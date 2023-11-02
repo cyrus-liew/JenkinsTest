@@ -17,7 +17,7 @@ describe('Login Page Validation Test', function () {
     });
 
     it('should display email validation message for an invalid email.', async function () {
-        await driver.get('http://localhost:3000/login'); // Replace with your actual URL
+        await driver.get('http://13.215.46.204:8443/login'); // Replace with your actual URL
 
         const emailInput = await driver.findElement(By.id('email'));
         await emailInput.sendKeys('invalid-email');
