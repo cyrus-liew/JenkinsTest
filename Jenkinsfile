@@ -1,10 +1,5 @@
 pipeline {
-	agent {
-        docker {
-            image 'node:18.18.2'
-            args '-d -p 8443:3000 -u root'
-        }
-    }
+	agent none
 
 	//tools {nodejs 'NodeJS'}
 
@@ -27,16 +22,31 @@ pipeline {
         stage('Testing'){
             parallel{
                 stage('Start Frontend'){
+                    agent {
+                        docker {
+                            image 'node:18.18.2'
+                            args '-d -p 8443:3000 -u root'
+                        }
+                    }
                     steps{
                         sh 'cd ./frontend-sit-forum-app && npm install'
                         sh 'cd ./frontend-sit-forum-app && npm start'
                     }
                 }
-                stage('Frontend Tests') {
+                stage('Headless Browser Test') {
+                    agent {
+                        docker {
+                            image 'maven:3-alpine'
+                            args '-v /root/.m2:/root/.m2'
+                        }
+                    }
                     steps {
-                        sh 'sleep 120'
-                        sh 'cd ./frontend-sit-forum-app && npm test'
-                        junit './frontend-sit-forum-app/frontend-test-results.xml'
+                        sh 'mvn -B -DskipTests clean package'
+                    	sh 'mvn test'
+                    	junit 'target/surefire-reports/*.xml'
+                        //sh 'sleep 120'
+                        //sh 'cd ./frontend-sit-forum-app && npm test'
+                        //junit './frontend-sit-forum-app/frontend-test-results.xml'
                     }
                 }
             }
