@@ -8,26 +8,18 @@ describe('Login Page Validation Test', function () {
 
     let driver;
     let chrome = require('selenium-webdriver/chrome');
-    let service;
 
     console.log("let");
 
     before(async function () {
         console.log("before start");
-        service = new chrome.ServiceBuilder()
-            .loggingTo('/my/log/file.txt')
-            .enableVerboseLogging()
-            .build();
-
-        console.log("before options");
-        let options = new chrome.Options();
-
-        console.log("before arguments");
-        options.addArguments("no-sandbox", "headless", "disable-gpu", "window-size=1024,768", "disable-dev-shm-usage")
 
         console.log("before try");
         try{
-            driver = await chrome.Driver.createSession(options, service);
+            driver = await new Builder()
+                .forBrowser('chrome')
+                .setChromeOptions(new chrome.Options().addArguments("no-sandbox", "headless", "disable-gpu", "window-size=1024,768", "disable-dev-shm-usage"))
+                .build();
         }
         catch (error){
             console.error('Error:', error);

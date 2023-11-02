@@ -35,6 +35,10 @@ pipeline {
                 sh 'unzip chromedriver-linux64.zip'
                 sh 'cp ./chromedriver-linux64/chromedriver /usr/bin/chromedriver'
                 sh 'chmod +x /usr/bin/chromedriver'
+
+                sh 'apt-get install xvfb'
+                sh 'apt-get install dbus'
+                sh 'service dbus start'
             }
         }
         stage('Testing'){
