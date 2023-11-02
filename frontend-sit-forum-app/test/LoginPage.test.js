@@ -14,10 +14,13 @@ describe('Login Page Validation Test', function () {
         console.log("before 1");
         chromeOptions.addArguments('--headless'); // Add the --headless option to run Chrome headlessly
         console.log("before 2");
-        driver = await new Builder()
-            .forBrowser('chrome')
-            .setChromeOptions(chromeOptions)
-            .build();
+        try{
+            driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
+        }
+        catch (error){
+            console.error('Error:', error);
+            throw error;
+        }
 
         console.log("before end");
     });
