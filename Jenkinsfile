@@ -51,9 +51,11 @@ pipeline {
                 }
                 stage('Headless Browser Test') {
                     steps {
-                        sh 'sleep 120'
-                        sh 'cd ./frontend-sit-forum-app && npm test'
-                        junit './frontend-sit-forum-app/frontend-test-results.xml'
+                        dir('frontend-sit-forum-app'){
+                            sh 'sleep 120'
+                            sh 'npm test'
+                            junit 'frontend-test-results.xml'
+                        }
                     }
                 }
             }
