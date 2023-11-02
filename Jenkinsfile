@@ -33,24 +33,27 @@ pipeline {
                 }
             }
         }
-		parallel{
-		    stage('Start Frontend'){
-                steps{
-                    dir('frontend-sit-forum-app'){
-                        sh 'npm start &'
+        stage('Testing'){
+            parallel{
+                stage('Start Frontend'){
+                    steps{
+                        dir('frontend-sit-forum-app'){
+                            sh 'npm start &'
+                        }
+                    }
+                }
+                stage('Frontend Tests') {
+                    steps {
+                        dir('frontend-sit-forum-app'){
+                            sh 'sleep 60'
+                            sh 'npm test'
+                            junit 'frontend-test-results.xml'
+                        }
                     }
                 }
             }
-            stage('Frontend Tests') {
-                steps {
-                    dir('frontend-sit-forum-app'){
-                        sh 'sleep 60'
-                        sh 'npm test'
-                        junit 'frontend-test-results.xml'
-                    }
-                }
-            }
-		}
+        }
+
 
 		stage('OWASP Dependency-Check Vulnerabilities') {
 			steps {
