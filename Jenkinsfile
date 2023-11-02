@@ -1,5 +1,10 @@
 pipeline {
-	agent none
+	agent {
+        docker {
+            image 'node:18.18.2'
+            args '-d -p 8443:3000 -u root'
+        }
+    }
 
 	//tools {nodejs 'NodeJS'}
 
@@ -18,36 +23,33 @@ pipeline {
                 //}
 			//}
 		//}
+        stage('Install Chrome for testing'){
+             // Install Chrome and ChromeDriver (adjust versions as needed)
+            sh 'apt-get update && apt-get install -y google-chrome-stable'
+            sh 'apt-get install -y wget'
+            sh 'wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
+            sh 'sh -c "echo \'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\' >> /etc/apt/sources.list.d/google-chrome.list"'
+            sh 'apt-get update && apt-get install -y google-chrome-stable'
+            sh 'apt-get install -y default-jre'
 
+            // Download and install ChromeDriver (adjust version as needed)
+            sh 'wget -N https://chromedriver.storage.googleapis.com/94.0.4606.61/chromedriver_linux64.zip'
+            sh 'unzip chromedriver_linux64.zip -d /usr/bin/'
+            sh 'chmod +x /usr/bin/chromedriver'
+        }
         stage('Testing'){
             parallel{
                 stage('Start Frontend'){
-                    agent {
-                        docker {
-                            image 'node:18.18.2'
-                            args '-d -p 8443:3000 -u root'
-                        }
-                    }
                     steps{
                         sh 'cd ./frontend-sit-forum-app && npm install'
                         sh 'cd ./frontend-sit-forum-app && npm start'
                     }
                 }
                 stage('Headless Browser Test') {
-                    agent {
-                        docker {
-                            image 'maven:3-alpine'
-                            args '-v /root/.m2:/root/.m2'
-                        }
-                    }
                     steps {
-                        sh 'mvn -B -DskipTests clean package'
                         sh 'sleep 120'
-                    	sh 'mvn test'
-                    	junit './frontend-sit-forum-app/frontend-test-results.xml'
-                        //sh 'sleep 120'
-                        //sh 'cd ./frontend-sit-forum-app && npm test'
-                        //junit './frontend-sit-forum-app/frontend-test-results.xml'
+                        sh 'cd ./frontend-sit-forum-app && npm test'
+                        junit './frontend-sit-forum-app/frontend-test-results.xml'
                     }
                 }
             }
