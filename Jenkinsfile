@@ -2,10 +2,12 @@ pipeline {
 	agent any
 	stages {
 		stage('Backend Tests') {
-			dir('backend-sit-forum-app-v1'){
-			    sh 'npm install'
-			    sh 'npm audit fix --force'
-			    sh 'npm test'
+		    steps{
+                dir('backend-sit-forum-app-v1'){
+                    sh 'npm install'
+                    sh 'npm audit fix --force'
+                    sh 'npm test'
+                }
 			}
 		}
 		stage('Publish Backend Test Results'){
