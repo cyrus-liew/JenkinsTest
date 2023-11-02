@@ -27,13 +27,13 @@ pipeline {
 			}
 		}
 
-        stage('Testing'){
-            agent {
-                docker {
-                    image 'node:20.9.0-alpine3.18'
-                    args '-p 8443:3000'
-                }
+        agent {
+            docker {
+                image 'node:20.9.0-alpine3.18'
+                args '-p 8443:3000'
             }
+        }
+        stage('Testing'){
             stage('Install Frontend Dependencies'){
                 steps{
                     dir('frontend-sit-forum-app'){
@@ -61,7 +61,7 @@ pipeline {
             }
         }
 
-
+        agent any
 		stage('OWASP Dependency-Check Vulnerabilities') {
 			steps {
 			    dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
