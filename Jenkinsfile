@@ -1,10 +1,5 @@
 pipeline {
-	agent {
-        docker {
-            image 'node:20.9.0-alpine3.18'
-            args '-p 8443:8443'
-        }
-    }
+	agent any
 	environment {
         PORT = credentials('port')
         DB_URI = credentials('DB_URI')
@@ -14,6 +9,12 @@ pipeline {
 
 	stages {
 		stage('Backend Tests') {
+		    agent {
+                docker {
+                    image 'node:20.9.0-alpine3.18'
+                    args '-p 8443:8443'
+                }
+            }
 		    steps{
                 dir('backend-sit-forum-app-v1'){
                     sh 'npm install'
@@ -23,21 +24,13 @@ pipeline {
                     sh 'export JWT_SECRET=$JWT_SECRET'
                     sh 'export NODE_ENV=$NODE_ENV'
                     sh 'npm test'
+                    junit 'test-results.xml'
                 }
 			}
 		}
-		stage('Publish Backend Test Results'){
-		    steps{
-		        dir('backend-sit-forum-app-v1'){
-                    //Publish xml to Jenkins
-                    junit 'test-results.xml'
-		        }
-		    }
-		}
 		stage('OWASP Dependency-Check Vulnerabilities') {
-			agent any
 			steps {
-			dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+			    dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
 			}
 		}
 	}
