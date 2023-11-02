@@ -24,18 +24,20 @@ pipeline {
 			//}
 		//}
         stage('Install Chrome for testing'){
-             // Install Chrome and ChromeDriver (adjust versions as needed)
-            sh 'apt-get update && apt-get install -y google-chrome-stable'
-            sh 'apt-get install -y wget'
-            sh 'wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
-            sh 'sh -c "echo \'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\' >> /etc/apt/sources.list.d/google-chrome.list"'
-            sh 'apt-get update && apt-get install -y google-chrome-stable'
-            sh 'apt-get install -y default-jre'
+            steps{
+                 // Install Chrome and ChromeDriver (adjust versions as needed)
+                sh 'apt-get update && apt-get install -y google-chrome-stable'
+                sh 'apt-get install -y wget'
+                sh 'wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
+                sh 'sh -c "echo \'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\' >> /etc/apt/sources.list.d/google-chrome.list"'
+                sh 'apt-get update && apt-get install -y google-chrome-stable'
+                sh 'apt-get install -y default-jre'
 
-            // Download and install ChromeDriver (adjust version as needed)
-            sh 'wget -N https://chromedriver.storage.googleapis.com/94.0.4606.61/chromedriver_linux64.zip'
-            sh 'unzip chromedriver_linux64.zip -d /usr/bin/'
-            sh 'chmod +x /usr/bin/chromedriver'
+                // Download and install ChromeDriver (adjust version as needed)
+                sh 'wget -N https://chromedriver.storage.googleapis.com/94.0.4606.61/chromedriver_linux64.zip'
+                sh 'unzip chromedriver_linux64.zip -d /usr/bin/'
+                sh 'chmod +x /usr/bin/chromedriver'
+            }
         }
         stage('Testing'){
             parallel{
