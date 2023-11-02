@@ -32,7 +32,9 @@ pipeline {
                     sh 'npm install'
                     sh 'export DANGEROUSLY_DISABLE_HOST_CHECK=$DANGEROUSLY_DISABLE_HOST_CHECK'
                     sh 'export REACT_APP_API=$REACT_APP_API'
-                    sh 'npm start'
+                    sh '(npm start &) && sleep 60'
+                    sh 'npm test'
+                    junit 'frontend-test-results.xml'
                 }
             }
         }
