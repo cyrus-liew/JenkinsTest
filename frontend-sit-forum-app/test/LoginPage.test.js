@@ -9,6 +9,7 @@ const chromeOptions = new Options();
 chromeOptions.headless();
 
 describe('Login Page Validation Test', function () {
+
     let driver;
 
     before(async function () {
