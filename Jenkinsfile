@@ -1,5 +1,7 @@
 pipeline {
 	agent any
+
+	tools {nodejs 'node'}
 	environment {
         PORT = credentials('port')
         DB_URI = credentials('DB_URI')
@@ -9,12 +11,12 @@ pipeline {
 
 	stages {
 		stage('Backend Tests') {
-		    agent {
-                docker {
-                    image 'node:20.9.0-alpine3.18'
-                    args '-p 8443:8443'
-                }
-            }
+		    //agent {
+            //    docker {
+            //        image 'node:20.9.0-alpine3.18'
+            //       args '-p 8443:8443'
+            //    }
+            //}
 		    steps{
                 dir('backend-sit-forum-app-v1'){
                     sh 'npm install'
