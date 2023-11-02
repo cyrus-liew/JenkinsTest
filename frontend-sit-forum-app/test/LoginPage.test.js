@@ -30,6 +30,7 @@ describe('Login Page Validation Test', function () {
     });
 
     it('should display email validation message for an invalid email.', async function () {
+        this.timeout(5000);
         console.log("11");
         await driver.get('http://13.215.46.204:8443/login'); // Replace with your actual URL
         console.log("12");
@@ -125,10 +126,12 @@ describe('Login Page Validation Test', function () {
 
     after(async function () {
         console.log("after1");
-        if (driver){
+        try{
             console.log("after2");
             await driver.quit();
             console.log("after3");
+        }catch (error){
+            console.error("Error while quitting:", error);
         }
         console.log("after4");
     });
