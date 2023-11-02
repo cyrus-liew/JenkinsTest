@@ -46,7 +46,8 @@ pipeline {
                 stage('Start Frontend'){
                     steps{
                         sh 'cd ./frontend-sit-forum-app && npm install'
-                        sh 'cd ./frontend-sit-forum-app && npm start'
+                        sh 'cd ./frontend-sit-forum-app && (npm start &)'
+                        input message: 'Finished using the web site? (Click "Proceed" to continue)'
                     }
                 }
                 stage('Headless Browser Test') {
@@ -63,6 +64,11 @@ pipeline {
             }
         }
         stage('OWASP Dependency-Check Vulnerabilities') {
+            agent{
+                docker{
+                    image 'openjdk:22'
+                }
+            }
             steps {
                 dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
             }
