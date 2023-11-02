@@ -1,5 +1,10 @@
 pipeline {
-	agent any
+	agent {
+        docker {
+            image 'node:latest'
+            args '-p 8443:3000'
+        }
+    }
 
 	tools {nodejs 'NodeJS'}
 	environment {
@@ -26,14 +31,6 @@ pipeline {
                 }
 			}
 		}
-    }
-    agent {
-        docker {
-            image 'node:20.9.0-alpine3.18'
-            args '-p 8443:3000'
-        }
-    }
-    stages{
         stage('Testing'){
             stage('Install Frontend Dependencies'){
                 steps{
@@ -61,9 +58,6 @@ pipeline {
                 }
             }
         }
-    }
-    agent any
-    stages{
         stage('OWASP Dependency-Check Vulnerabilities') {
             steps {
                 dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
