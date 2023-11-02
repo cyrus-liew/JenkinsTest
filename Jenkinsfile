@@ -36,24 +36,29 @@ pipeline {
             }
         }
 		stage('Frontend Tests') {
-		    parallel{
-		        stage('Deploy Frontend'){
-		            steps{
-                        dir('frontend-sit-forum-app'){
+            steps {
+                script {
+                    // Define and execute 'npm start' stage
+                    def npmStart = {
+                        dir('frontend-sit-forum-app') {
                             sh 'npm start'
                         }
                     }
-		        }
-                stage('UI Test'){
-                    dependsOn 'npm start'
-                    steps{
-                        dir('frontend-sit-forum-app'){
+
+                    // Define and execute 'npm test' stage, which depends on 'npm start'
+                    def npmTest = {
+                        dir('frontend-sit-forum-app') {
                             sh 'npm test'
                             junit 'frontend-test-results.xml'
                         }
                     }
+
+                    parallel(
+                        npmStart: npmStart,
+                        npmTest: npmTest
+                    )
                 }
-		    }
+            }
         }
 		stage('OWASP Dependency-Check Vulnerabilities') {
 			steps {
