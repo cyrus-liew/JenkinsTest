@@ -45,7 +45,7 @@ pipeline {
                 stage('Start Frontend'){
                     steps{
                         dir('frontend-sit-forum-app'){
-                            sh 'npm start"
+                            sh 'npm start'
                         }
                     }
                 }
