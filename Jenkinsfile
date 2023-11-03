@@ -53,7 +53,7 @@ pipeline {
                 stage('Headless Browser Test') {
                     steps {
                         dir('frontend-sit-forum-app'){
-                            sh 'sleep 120'
+                            sh 'sleep 80'
                             sh 'npm test'
                             junit 'frontend-test-results.xml'
                         }
