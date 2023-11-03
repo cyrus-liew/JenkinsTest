@@ -63,7 +63,8 @@ pipeline {
         }
         stage('OWASP Dependency-Check Vulnerabilities') {
             steps {
-                sh 'apt install openjdk-17-jdk -y'
+                sh 'df -h'
+                sh 'apt-get install openjdk-17-jdk -y'
                 sh 'java -version'
                 sh 'echo "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/bin/java" >> ~/.bashrc'
                 sh '. ~/.bashrc'
