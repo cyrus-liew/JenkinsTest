@@ -1,5 +1,10 @@
 pipeline {
-    agent none
+	agent {
+        docker {
+            image 'node:18.18.2'
+            args '-d -p 8443:3000 -u root'
+        }
+    }
 
 	//tools {nodejs 'NodeJS'}
 
@@ -19,12 +24,6 @@ pipeline {
 			//}
 		//}
         stage('Install Chrome for testing'){
-            agent {
-                    docker {
-                        image 'node:18.18.2'
-                        args '-d -p 8443:3000 -u root'
-                    }
-                }
             steps{
                 sh 'wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
                 sh 'sh -c "echo \'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\' >> /etc/apt/sources.list.d/google-chrome.list"'
@@ -45,12 +44,6 @@ pipeline {
         stage('Testing'){
             parallel{
                 stage('Start Frontend'){
-                    agent {
-                        docker {
-                            image 'node:18.18.2'
-                            args '-d -p 8443:3000 -u root'
-                        }
-                    }
                     steps{
                         sh 'cd ./frontend-sit-forum-app && npm install'
                         sh 'cd ./frontend-sit-forum-app && npm start'
@@ -58,12 +51,6 @@ pipeline {
                     }
                 }
                 stage('Headless Browser Test') {
-                    agent {
-                            docker {
-                                image 'node:18.18.2'
-                                args '-d -p 8443:3000 -u root'
-                            }
-                        }
                     steps {
                         dir('frontend-sit-forum-app'){
                             sh 'sleep 120'
@@ -75,7 +62,6 @@ pipeline {
             }
         }
         stage('OWASP Dependency-Check Vulnerabilities') {
-            agent any
             steps {
                 sh 'df -h'
                 sh 'apt-get install openjdk-17-jdk -y'
