@@ -2,7 +2,7 @@ pipeline {
 	agent {
         docker {
             image 'node:18.18.2'
-            args '-d -p 8443:3000 -u root'
+            args '-d -p 8443:3000 -u root -v /usr/lib/jvm/java-17-openjdk-amd64:/usr/lib/jvm/java-17-openjdk-amd64 -e JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64'
         }
     }
 
@@ -25,6 +25,7 @@ pipeline {
 		//}
         stage('Install Chrome for testing'){
             steps{
+                sh 'echo $JAVA_HOME'
                 sh 'wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
                 sh 'sh -c "echo \'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\' >> /etc/apt/sources.list.d/google-chrome.list"'
                 sh 'apt-get update'
@@ -63,13 +64,6 @@ pipeline {
         }
         stage('OWASP Dependency-Check Vulnerabilities') {
             steps {
-                sh 'df -h'
-                sh 'apt-get install openjdk-17-jdk -y'
-                sh 'java -version'
-                sh 'echo "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/bin/java" >> ~/.bashrc'
-                sh '. ~/.bashrc'
-                sh 'echo $JAVA_HOME'
-                sh 'rm -rf ~/.dependency-check'
                 dependencyCheck additionalArguments: '--format HTML --format XML --log debug', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
             }
         }
