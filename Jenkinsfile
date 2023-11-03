@@ -2,7 +2,7 @@ pipeline {
 	agent {
         docker {
             image 'node:18.18.2'
-            args '-d -p 8443:3000 -u root -v /home/student85/java/java-17-openjdk-amd64:/opt/host-java -e JAVA_HOME=/opt/host-java'
+            args '-d -p 8443:3000 -u root -v /home/student85/java:/opt/host-java -e JAVA_HOME=/opt/host-java'
         }
     }
 
@@ -26,6 +26,9 @@ pipeline {
         stage('Install Chrome for testing'){
             steps{
                 sh 'echo $JAVA_HOME'
+                sh 'echo "export PATH=/opt/host-java/java-17-openjdk-amd64/bin:$PATH" >> ~/.bashrc'
+                sh '. ~/.bashrc'
+                sh 'java -version'
                 sh 'wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
                 sh 'sh -c "echo \'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\' >> /etc/apt/sources.list.d/google-chrome.list"'
                 sh 'apt-get update'
@@ -47,7 +50,7 @@ pipeline {
                 stage('Start Frontend'){
                     steps{
                         sh 'cd ./frontend-sit-forum-app && npm install'
-                        sh 'cd ./frontend-sit-forum-app && npm start'
+                        sh 'cd ./frontend-sit-forum-app && (npm start &)'
                         input message: 'Finished using the web site? (Click "Proceed" to continue)'
                     }
                 }
