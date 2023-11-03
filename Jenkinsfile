@@ -9,20 +9,16 @@ pipeline {
 	//tools {nodejs 'NodeJS'}
 
 	stages {
-		//stage('Backend Tests') {
-		    //steps{
-                //dir('backend-sit-forum-app-v1'){
-                    //sh 'npm install'
-                    //sh 'npm audit fix --force'
-                    //sh 'export PORT=$PORT'
-                    //sh 'export DB_URI=$DB_URI'
-                    //sh 'export JWT_SECRET=$JWT_SECRET'
-                    //sh 'export NODE_ENV=$NODE_ENV'
-                    //sh 'npm test'
-                    //junit 'backend-test-results.xml'
-                //}
-			//}
-		//}
+		stage('Backend Tests') {
+		    steps{
+                dir('backend-sit-forum-app-v1'){
+                    sh 'npm install'
+                    sh 'npm audit fix --force'
+                    sh 'npm test'
+                    junit 'backend-test-results.xml'
+                }
+			}
+		}
         stage('Install Chrome for testing'){
             steps{
                 sh 'echo $JAVA_HOME'
@@ -45,7 +41,7 @@ pipeline {
                 sh 'service dbus start'
             }
         }
-        stage('Testing'){
+        stage('Frontend UI Testing'){
             parallel{
                 stage('Start Frontend'){
                     steps{
