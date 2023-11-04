@@ -70,8 +70,7 @@ pipeline {
         }
         stage('OWASP Dependency-Check Vulnerabilities') {
             steps {
-                sh 'export JAVA_OPTS=-Danalyzer.dependencybundling.enabled=false'
-                dependencyCheck additionalArguments: '--format HTML --format XML --log /owasplog', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+                dependencyCheck additionalArguments: '--propertyfile checker.properties --format HTML --format XML --log /owasplog', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
             }
         }
 	}
