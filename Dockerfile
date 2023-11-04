@@ -1,5 +1,5 @@
 # Use the official Node.js image as a base image
-FROM node:16
+FROM node:18.18.2
 
 # Set the working directory in the container
 WORKDIR /app
@@ -11,6 +11,7 @@ COPY ./frontend-sit-forum-app /app/frontend
 # Install backend dependencies
 WORKDIR /app/backend
 RUN npm install
+RUN npm audit fix --force
 
 # Expose the port that the backend will run on
 EXPOSE 8888
