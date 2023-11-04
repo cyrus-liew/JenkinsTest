@@ -2,7 +2,7 @@ pipeline {
 	agent {
         docker {
             image 'node:18.18.2'
-            args '-d -p 8443:3000 -u root -v /home/student85/java:/opt/host-java -e JAVA_HOME=/opt/host-java/jdk-11.0.0.1'
+            args '-d -p 8443:3000 -u root -v /home/azureuser/java:/opt/host-java -e JAVA_HOME=/opt/host-java/jdk-17'
         }
     } 
 
@@ -23,9 +23,9 @@ pipeline {
         stage('Install Chrome for testing'){
             steps{
                 sh 'echo $JAVA_HOME'
-                sh 'echo "export PATH=/opt/host-java/jdk-11.0.0.1/bin:$PATH" >> ~/.bashrc'
+                sh 'echo "export PATH=/opt/host-java/jdk-17/bin:$PATH" >> ~/.bashrc'
                 sh '. ~/.bashrc'
-                sh '/opt/host-java/jdk-11.0.0.1/bin/java -version'
+                sh '/opt/host-java/jdk-17/bin/java -version'
                 sh 'wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
                 sh 'sh -c "echo \'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\' >> /etc/apt/sources.list.d/google-chrome.list"'
                 sh 'apt-get update'
