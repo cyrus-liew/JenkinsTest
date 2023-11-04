@@ -5,6 +5,7 @@ pipeline {
             args '-d -p 8443:3000 -u root -v /home/azureuser/java:/opt/host-java -e JAVA_HOME=/opt/host-java/jdk-17'
         }
     }
+
     
 	stages {
 		stage('Backend Tests') {
