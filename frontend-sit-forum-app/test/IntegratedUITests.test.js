@@ -32,7 +32,7 @@ describe('Login Page Validation Test', function () {
     it('should display email validation message for an invalid email.', async function () {
         this.timeout(5000);
         console.log("11");
-        await driver.get('http://13.215.46.204:8443/login'); // Replace with your actual URL
+        await driver.get('http://34.143.244.7:8443/login'); // Replace with your actual URL
         console.log("12");
         const emailInput = await driver.findElement(By.id('email'));
         await emailInput.sendKeys('invalid-email');
@@ -47,7 +47,7 @@ describe('Login Page Validation Test', function () {
 
     it('should display password validation message for an invalid password.', async function () {
         console.log("21");
-        await driver.get('http://13.215.46.204:8443/login'); // Replace with your actual URL
+        await driver.get('http://34.143.244.7:8443/login'); // Replace with your actual URL
         console.log("22");
         const passwordInput = await driver.findElement(By.id('password'));
         await passwordInput.sendKeys('short');
@@ -62,7 +62,7 @@ describe('Login Page Validation Test', function () {
 
     it('should display email validation message for an invalid email with a valid password.', async function () {
         console.log("31");
-        await driver.get('http://13.215.46.204:8443/login'); // Replace with your actual URL
+        await driver.get('http://34.143.244.7:8443/login'); // Replace with your actual URL
         console.log("32");
         const emailInput = await driver.findElement(By.id('email'));
         await emailInput.sendKeys('invalid-email');
@@ -80,7 +80,7 @@ describe('Login Page Validation Test', function () {
 
     it('should display password validation message for an invalid password with a valid email.', async function () {
         console.log("41");
-        await driver.get('http://13.215.46.204:8443/login'); // Replace with your actual URL
+        await driver.get('http://34.143.244.7:8443/login'); // Replace with your actual URL
         console.log("42");
         const emailInput = await driver.findElement(By.id('email'));
         await emailInput.sendKeys('testadmin@test.com');
@@ -99,7 +99,7 @@ describe('Login Page Validation Test', function () {
     it('should display no error message for a valid password with a valid email.', async function () {
         console.log("51");
         const output = true;
-        await driver.get('http://13.215.46.204:8443/login'); // Replace with your actual URL
+        await driver.get('http://34.143.244.7:8443/login'); // Replace with your actual URL
         console.log("52");
         const emailInput = await driver.findElement(By.id('email'));
         await emailInput.sendKeys('testadmin@test.com');
@@ -165,7 +165,7 @@ describe('Registration Page Validation Test', function () {
     it('should display a name length error message for a name that is too short.', async function () {
         this.timeout(5000);
         console.log("11");
-        await driver.get('http://13.215.46.204:8443/userregister'); // Replace with your actual URL
+        await driver.get('http://34.143.244.7:8443/userregister'); // Replace with your actual URL
         console.log("12");
         const nameInput = await driver.findElement(By.id('name'));
         await nameInput.sendKeys('name');
@@ -181,7 +181,7 @@ describe('Registration Page Validation Test', function () {
     it('should display an invalid name error message for a name that contains invalid characters.', async function () {
         this.timeout(5000);
         console.log("11");
-        await driver.get('http://13.215.46.204:8443/userregister'); // Replace with your actual URL
+        await driver.get('http://34.143.244.7:8443/userregister'); // Replace with your actual URL
         console.log("12");
         const nameInput = await driver.findElement(By.id('name'));
         await nameInput.sendKeys('name123@@@');
@@ -197,7 +197,7 @@ describe('Registration Page Validation Test', function () {
     it('should display an invalid email message for an invalid email.', async function () {
         this.timeout(5000);
         console.log("11");
-        await driver.get('http://13.215.46.204:8443/userregister'); // Replace with your actual URL
+        await driver.get('http://34.143.244.7:8443/userregister'); // Replace with your actual URL
         console.log("12");
         const emailInput = await driver.findElement(By.id('email'));
         await emailInput.sendKeys('invalid-email');
@@ -212,7 +212,7 @@ describe('Registration Page Validation Test', function () {
 
     it('should display an invalid password message for a password that is too short.', async function () {
         console.log("21");
-        await driver.get('http://13.215.46.204:8443/userregister'); // Replace with your actual URL
+        await driver.get('http://34.143.244.7:8443/userregister'); // Replace with your actual URL
         console.log("22");
         const passwordInput = await driver.findElement(By.id('password'));
         await passwordInput.sendKeys('short');
@@ -227,7 +227,7 @@ describe('Registration Page Validation Test', function () {
 
     it('should display a password do not match message when passwords do not match.', async function () {
         console.log("21");
-        await driver.get('http://13.215.46.204:8443/userregister'); // Replace with your actual URL
+        await driver.get('http://34.143.244.7:8443/userregister'); // Replace with your actual URL
         console.log("22");
         const passwordInput = await driver.findElement(By.id('confirmPassword'));
         await passwordInput.sendKeys('nomatch');
@@ -243,7 +243,7 @@ describe('Registration Page Validation Test', function () {
     it('should display no error message when all fields are valid.', async function () {
         console.log("51");
         const output = true;
-        await driver.get('http://13.215.46.204:8443/userregister'); // Replace with your actual URL
+        await driver.get('http://34.143.244.7:8443/userregister'); // Replace with your actual URL
         console.log("52");
         const nameInput = await driver.findElement(By.id('name'));
         await nameInput.sendKeys('proper name');
