@@ -70,7 +70,8 @@ pipeline {
         }
         stage('OWASP Dependency-Check Vulnerabilities') {
             steps {
-                dependencyCheck additionalArguments: '--format HTML --format XML --log debug', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
+                sh 'pwd && ls'
+                dependencyCheck additionalArguments: '--format HTML --format XML --log debug -p checker.properties', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
             }
         }
 	}
