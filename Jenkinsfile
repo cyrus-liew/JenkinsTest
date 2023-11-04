@@ -6,7 +6,7 @@ pipeline {
         }
     } 
 
-    //test push
+    //test push 2
 	//tools {nodejs 'NodeJS'}
 
 	stages {
