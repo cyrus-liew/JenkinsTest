@@ -63,11 +63,8 @@ pipeline {
         }
 	stage('Uninstall Chrome'){
             steps{
-                sh 'apt-get install -y google-chrome-stable'
 		sh 'apt-get remove -y google-chrome-stable'
 		sh 'apt-get remove -y xvfb'
-		sh 'service dbus stop'
-		sh 'apt-get remove -y dbus'
             }
         }
         stage('OWASP Dependency-Check Vulnerabilities') {
