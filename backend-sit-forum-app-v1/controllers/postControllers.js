@@ -5,10 +5,17 @@ import Post from "../models/Post";
 import { v4 as uuidv4 } from 'uuid';
 import Comment from "../models/Comment";
 
+const sanitize = require('mongo-sanitize');
+
+
 //create post
 const createPost = async (req, res, next) => {
     try {
-        const { title, caption, tags, content} = req.body;
+        // const { title, caption, tags, content} = req.body;
+        const title = sanitize(req.body.title);
+        const caption = sanitize(req.body.caption);
+        const tags = sanitize(req.body.tags);
+        const content = sanitize(req.body.content);
 
         const bodyObject =  {
             "type": "doc",

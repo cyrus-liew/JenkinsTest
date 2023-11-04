@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="5.304" tests="11" failures="0">
+  <testsuite name="Root Suite" timestamp="2023-11-03T21:21:51" tests="0" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Login Page Validation Test" timestamp="2023-11-03T21:21:51" tests="5" file="F:\Cyrus\Documents\SIT\3203\JenkinsTest\frontend-sit-forum-app\test\IntegratedUITests.test.js" time="2.606" failures="0">
+    <testcase name="Login Page Validation Test should display email validation message for an invalid email." time="1.146" classname="should display email validation message for an invalid email.">
+    </testcase>
+    <testcase name="Login Page Validation Test should display password validation message for an invalid password." time="0.134" classname="should display password validation message for an invalid password.">
+    </testcase>
+    <testcase name="Login Page Validation Test should display email validation message for an invalid email with a valid password." time="0.135" classname="should display email validation message for an invalid email with a valid password.">
+    </testcase>
+    <testcase name="Login Page Validation Test should display password validation message for an invalid password with a valid email." time="0.129" classname="should display password validation message for an invalid password with a valid email.">
+    </testcase>
+    <testcase name="Login Page Validation Test should display no error message for a valid password with a valid email." time="0.122" classname="should display no error message for a valid password with a valid email.">
+    </testcase>
+  </testsuite>
+  <testsuite name="Registration Page Validation Test" timestamp="2023-11-03T21:21:54" tests="6" file="F:\Cyrus\Documents\SIT\3203\JenkinsTest\frontend-sit-forum-app\test\IntegratedUITests.test.js" time="2.697" failures="0">
+    <testcase name="Registration Page Validation Test should display a name length error message for a name that is too short." time="1.156" classname="should display a name length error message for a name that is too short.">
+    </testcase>
+    <testcase name="Registration Page Validation Test should display an invalid name error message for a name that contains invalid characters." time="0.137" classname="should display an invalid name error message for a name that contains invalid characters.">
+    </testcase>
+    <testcase name="Registration Page Validation Test should display an invalid email message for an invalid email." time="0.100" classname="should display an invalid email message for an invalid email.">
+    </testcase>
+    <testcase name="Registration Page Validation Test should display an invalid password message for a password that is too short." time="0.106" classname="should display an invalid password message for a password that is too short.">
+    </testcase>
+    <testcase name="Registration Page Validation Test should display a password do not match message when passwords do not match." time="0.092" classname="should display a password do not match message when passwords do not match.">
+    </testcase>
+    <testcase name="Registration Page Validation Test should display no error message when all fields are valid." time="0.195" classname="should display no error message when all fields are valid.">
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -11,7 +11,6 @@ COPY ./frontend-sit-forum-app /app/frontend
 # Install backend dependencies
 WORKDIR /app/backend
 RUN npm install
-RUN npm audit fix --force
 
 # Expose the port that the backend will run on
 EXPOSE 8888

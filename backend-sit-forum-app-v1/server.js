@@ -4,6 +4,7 @@ import connectDB from './config/db';
 import { errorResponserHandler, invalidPatHandler } from './middleware/errorHandler';
 import cors from 'cors';
 import path from "path";
+import jwt from "jsonwebtoken"
 
 // Routes
 import userRoutes from './routes/userRoutes';

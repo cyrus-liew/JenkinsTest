@@ -35,6 +35,49 @@ export const login = async ({ email, password }) => {
     }
 };
 
+export const forgotPasswordRequest = async ({ email }) => {
+    try {
+        const { data } = await axios.post(`${process.env.REACT_APP_API}/api/users/forgotPassword`, email);
+        return data;
+    } catch (error) {
+        if (error.response && error.response.data.message) {
+            throw new Error(error.response.data.message);
+        } else {
+            throw new Error(error.message);
+        }
+    }
+};
+
+export const resetPasswordRequest = async ({id, token, password}) => {
+    try {
+        const { data }  = await axios.post(`${process.env.REACT_APP_API}/api/users/reset-password/${id}/${token}`, {password});
+        return data;
+    } catch (error) {
+        if (error.response && error.response.data.message) {
+            throw new Error(error.response.data.message);
+        } else {
+            throw new Error(error.message);
+        }
+    }
+};
+
+export const otpVerify = async ({ id, otp }) => {
+    try {
+
+        let userotp = otp.otp
+        const { data } = await axios.post(`${process.env.REACT_APP_API}/api/users/otp/${id}`, {
+            userotp,
+            id
+        });
+        return data;
+    } catch (error) {
+        if (error.response && error.response.data.message) {
+            throw new Error(error.response.data.message);
+        } else {
+            throw new Error(error.message);
+        }
+    }
+};
 
 //retrieve user data for user profile
 export const getUserProfile = async ({ token }) => {
@@ -58,7 +101,7 @@ export const getUserProfile = async ({ token }) => {
 };
 
 
-//update user proile 
+//update user proile
 export const updateProfile = async ({ token, userData }) => {
     try {
         //create obj and save it in config variable

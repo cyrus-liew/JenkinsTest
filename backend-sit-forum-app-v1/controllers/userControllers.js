@@ -1,13 +1,22 @@
 import { uploadPicture } from "../middleware/uploadPictureMiddleware.js";
 import User from "../models/User.js"
 import { fileRemover } from "../utils/fileRemover.js";
+// import nodemailer from 'nodemailer'
+// import jwt from 'jsonwebtoken'
+// //import Math from 'Math';
+// import {hash, compare} from 'bcryptjs';
+// import UserOTP from "../models/UserOTP";
+// import logger  from "../config/logger";
 
+import sanitize from 'mongo-sanitize';
 //user register function
 const registerUser = async (req, res, next) => {
     try {
 
         console.log('Request body:', req.body);
-        const { name, email, password } = req.body;
+        const name = sanitize(req.body.name);
+        const email = sanitize(req.body.email);
+        const password = sanitize(req.body.password);
 
         //check if email is valid
         const email_regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -66,7 +75,8 @@ const loginUser = async (req, res, next) => {
     try {
         console.log('Request body:', req.body);
         //user pass in email and password
-        const { email, password } = req.body;
+        const email = sanitize(req.body.email);
+        const password = sanitize(req.body.password);
 
         const email_regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if(!email_regex.test(email)) {
@@ -89,6 +99,42 @@ const loginUser = async (req, res, next) => {
 
         //compare function return true / false
         if (await user.comparePassword(password)) {
+            //if user is admin
+            if(user.admin === true) {
+                logger.info(`Admin ${user.email} login success`);
+            }
+
+            // Generate OTP
+            const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
+            console.log(otp)
+
+            // nodemailer
+            let config = {
+                service : 'gmail',
+                auth : {
+                    user: process.env.EMAIL,
+                    pass: process.env.EMAIL_PASSWORD
+                }
+            }
+            const transporter = nodemailer.createTransport(config);
+
+            const newOTPVerification = await new UserOTP({
+                userId: user._id,
+                otp: otp,
+                createdAt: Date.now(),
+                expiresAt: Date.now() + 900000,
+            });
+
+            await newOTPVerification.save()
+
+            const message = await transporter.sendMail({
+                from: process.env.EMAIL, // sender address
+                to: email, // receivers
+                subject: "Forum Reset Password Link", // Subject line
+                html: `Hi ${user.name}, here your OTP is ${otp}. OTP expires in 15 mins`, // html body
+            });
+
+
             //if true send user data
             return res.status(201).json({
                 _id: user._id,
@@ -101,6 +147,9 @@ const loginUser = async (req, res, next) => {
 
             });
         } else {
+            if(user.admin === true) {
+                logger.error(`Admin ${user.email} login failed`);
+            }
             throw new Error("Invalid Email or Password");
         }
     } catch (error) {
@@ -108,6 +157,59 @@ const loginUser = async (req, res, next) => {
     }
 };
 
+const otpVerify = async (req, res, next) => {
+    try{
+        let {userotp, id} = req.body
+        console.log(userotp, id)
+        if (!id || !userotp){
+            throw new Error("Invalid OTP");
+        }
+
+        const UserOTPVerficationRecords = await UserOTP.find({
+            id
+        })
+        const _id = id
+        let user = await User.findById({ _id });
+
+        if (!user){
+            throw new Error("Account dont exist. Please sign up");
+        }
+
+        if (UserOTPVerficationRecords.length <= 0) {
+            throw new Error("Account dont exist. Please sign up");
+        }
+
+        const {expiresAt} = UserOTPVerficationRecords[0];
+        const otp = UserOTPVerficationRecords[0].otp
+
+        console.log(user)
+        if (expiresAt < Date.now()){
+            await UserOTP.deleteMany({id});
+            throw new Error("OTP expired. Please Sign in again.");
+        }
+        console.log(userotp, otp)
+        const validOTP = compare(userotp, otp)
+        console.log(validOTP)
+        if (userotp === otp){
+            const userId = id;
+            await UserOTP.deleteMany({userId});
+            return res.status(201).json({
+                _id: user._id,
+                avater: user.avater,
+                name: user.name,
+                email: user.email,
+                verified: user.verified,
+                admin: user.admin,
+                token: await user.generateJWT(),
+            });
+        }else{
+            throw new Error("Wrong OTP");
+        }
+
+    }catch(error){
+        next(error);
+    }
+};
 //user profile register
 const userProfile = async (req, res, next) => {
     try {
@@ -146,18 +248,18 @@ const updateProfile = async (req, res, next) => {
             throw new Error("User not found");
         }
 
-        user.name = req.body.name || user.name;
-        user.email = req.body.email || user.email;
+        user.name = sanitize(req.body.name) || user.name;
+        user.email = sanitize(req.body.email) || user.email;
 
         const email_regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if(!email_regex.test(user.email)) {
             throw new Error("Email is not valid");
         }
-        if (req.body.password && req.body.password.length < 8) {
+        if (sanitize(req.body.password) && req.body.password.length < 8) {
             throw new Error("Password length must be at least 8")
         }
-        else if (req.body.password) {
-            user.password = req.body.password;
+        else if (sanitize(req.body.password)) {
+            user.password = sanitize(req.body.password);
         }
 
         // if all pass the condition , save the user
@@ -255,6 +357,11 @@ const updateUser = async (req, res, next) => {
 
         // if all pass the condition , save the user
         const updatedUserProfile = await user.save();
+        if (updatedUserProfile.admin === true) {
+            logger.info(`Admin ${req.user.email} update user ${user.email} to admin`);
+        } else {
+            logger.info(`Admin ${req.user.email} update user ${user.email} to user`);
+        }
 
         res.json({
             _id: updatedUserProfile._id,
@@ -290,4 +397,97 @@ const getAllUser = async (req, res, next) => {
     }
 };
 
-export { registerUser, loginUser, userProfile, updateProfile, updateProfilePicture, getAllUser, updateUser };
+const forgotPassword = async (req, res, next) => {
+    try {
+        const email = sanitize(req.body.email);
+        const email_regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        if(!email_regex.test(email)) {
+            throw new Error("Email is not valid");
+        }
+        //check if user exist
+        let user = await User.findOne({ email });
+
+        //check if the user exits
+        if (!user) {
+            throw new Error("Invalid Email");
+        }
+
+        // generate link with expiry
+        const secret = process.env.JWT_SECRET + user.password
+        const payload = {
+            email: user.email,
+            id: user._id
+        }
+
+        const token = jwt.sign(payload, secret, {expiresIn: '15m'})
+        console.log("token", user._id)
+        const link = `http://localhost:3000/reset-password/${user._id}/${token}`;
+
+        // nodemailer
+        let config = {
+            service : 'gmail',
+            auth : {
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASSWORD
+            }
+        }
+        const transporter = nodemailer.createTransport(config);
+
+        const message = await transporter.sendMail({
+            from: process.env.EMAIL, // sender address
+            to: email, // receivers
+            subject: "Forum Reset Password Link", // Subject line
+            html: `Hi ${user.name}, click <a href="${link}">here</a> to reset your password`, // html body
+        });
+        res.send("Password reset link has een sent to your email");
+
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+// when user click the link
+const resetPassword = async (req, res, next) => {
+    try {
+        console.log("controller", req.params);
+        const {id, token} = req.params
+        const password = sanitize(req.body.password);
+
+        if (password.length < 8) {
+            throw new Error("Password must be at least 8 characters");
+        }
+
+        //check if user exist
+        let user = await User.findById({_id: id});
+        console.log("my user", user);
+        const secret = process.env.JWT_SECRET + user.password
+        jwt.verify(token, secret, (err, decoded) => {
+            if (err) {
+                throw new Error("Invalid token");
+            } else {
+                //change password
+                console.log("pw changed!")
+                user.password = password.password;
+            }
+        })
+        console.log(password)
+        const updatedUserProfile = await user.save();
+
+        res.json({
+            _id: updatedUserProfile._id,
+            avater: updatedUserProfile.avater,
+            name: updatedUserProfile.name,
+            email: updatedUserProfile.email,
+            verified: updatedUserProfile.verified,
+            admin: updatedUserProfile.admin,
+            token: await updatedUserProfile.generateJWT(),
+        })
+    }catch(error){
+        console.log(error);
+        next(error);
+    }
+}
+
+export { registerUser, loginUser, userProfile, updateProfile, updateProfilePicture, getAllUser, updateUser, forgotPassword, resetPassword, otpVerify};

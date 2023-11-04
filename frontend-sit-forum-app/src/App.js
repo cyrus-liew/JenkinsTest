@@ -16,6 +16,9 @@ import ManagePost from "./pages/admin/screens/posts/ManagePost";
 import AboutPage from "./pages/Home/aboutPage";
 import ContactPage from "./pages/Home/contactPage";
 import FaqPage from "./pages/Home/faqPage";
+import ForgotPasswordPage from "./pages/forgotPassword/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/forgotPassword/ResetPasswordPage";
+import OTPPage from "./pages/login/OTPPage";
 
 
 
@@ -35,6 +38,9 @@ function App() {
         <Route path="/about" element={<AboutPage />}/>
         <Route path="/contacts" element={<ContactPage />}/>
         <Route path="/faq" element={<FaqPage />}/>
+        <Route path="/forgot-password" element={<ForgotPasswordPage />}/>
+        <Route path="/reset-password/:id/:token" element={<ResetPasswordPage />}/>
+        <Route path="/otp/:id" element={<OTPPage />}/>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Admin />} />
           <Route path="comments" element={<Comment />} />
