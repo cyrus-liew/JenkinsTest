@@ -1,7 +1,7 @@
 pipeline {
 	agent {
         docker {
-            image 'node:18.18.2-alpine'
+            image 'node:18.18.2'
             args '-d -p 8443:3000 -u root -v /home/student85/java:/opt/host-java -e JAVA_HOME=/opt/host-java/jdk-11.0.0.1'
         }
     }
@@ -59,6 +59,15 @@ pipeline {
                         }
                     }
                 }
+            }
+        }
+	stage('Uninstall Chrome'){
+            steps{
+                sh 'apt-get install -y google-chrome-stable'
+		sh 'apt-get remove -y google-chrome-stable'
+		sh 'apt-get remove -y xvfb'
+		sh 'service dbus stop'
+		sh 'apt-get remove -y dbus'
             }
         }
         stage('OWASP Dependency-Check Vulnerabilities') {
